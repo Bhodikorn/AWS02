@@ -4,7 +4,7 @@ FROM php:7.4-apache
 # Copy your PHP, HTML, and JavaScript files to the container
 COPY . .
 
-# Set working directory inside the container
+# Set working directory inside the containers
 WORKDIR /var/www/html
 
 # Create an .htaccess file to set DirectoryIndex
