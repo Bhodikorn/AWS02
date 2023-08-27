@@ -76,8 +76,7 @@ jobs:
           service: ${{ secrets.ECS_SERVICE }}
           cluster: ${{ secrets.ECS_CLUSTER }}
           wait-for-service-stability: true
-      
-          - name: Update ECS Service
+      - name: Update ECS Service
         id: update-ecs-service
         run: |
           aws ecs update-service \
