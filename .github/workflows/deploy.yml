@@ -70,7 +70,7 @@ jobs:
       with:
         name: image-info
         path: .
-
+        
     - name: Read image information from file
       id: read-image-info
       run: echo "::set-output name=image::$(cat image.txt)"
