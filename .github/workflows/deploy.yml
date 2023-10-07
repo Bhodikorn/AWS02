@@ -24,7 +24,7 @@ jobs:
       - name: Run unit tests
         run: echo "Running unit tests"
 
-  build-and-push-image:
+  configure-aws:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,13 +35,27 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
+
+  login-ecr:
+    runs-on: ubuntu-latest
+    needs: configure-aws
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+  build-image:
+    runs-on: ubuntu-latest
+    needs: login-ecr
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ needs.login-ecr.outputs.registry }}
           ECR_REPOSITORY: doggy
           IMAGE_TAG: latest
         run: |
@@ -49,8 +63,9 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-  deploy-task-definition:
+  download-task-definition:
     runs-on: ubuntu-latest
+    needs: build-image
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -58,23 +73,38 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition ${{ secrets.ECS_CONTAINER_DEFINITION }} \
           --query taskDefinition > task-definition.json
+
+  fill-in-task-definition:
+    runs-on: ubuntu-latest
+    needs: download-task-definition
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
           container-name: ${{ secrets.ECS_CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ needs.build-image.outputs.image }}
+
+  deploy-ecs-task-definition:
+    runs-on: ubuntu-latest
+    needs: fill-in-task-definition
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ needs.fill-in-task-definition.outputs.task-definition }}
           service: ${{ secrets.ECS_SERVICE }}
           cluster: ${{ secrets.ECS_CLUSTER }}
           wait-for-service-stability: true
 
   update-ecs-service:
     runs-on: ubuntu-latest
+    needs: deploy-ecs-task-definition
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
