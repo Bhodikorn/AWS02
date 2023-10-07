@@ -5,8 +5,8 @@
     "inferenceAccelerators": [],
     "containerDefinitions": [
         {
-            "name": "ecs-doggy-sandbox",
-            "image": "184121542536.dkr.ecr.ap-southeast-1.amazonaws.com/doggy_repo:lastest",
+            "name": "my-clock",
+            "image": "317047489192.dkr.ecr.ap-southeast-1.amazonaws.com/doggy:lastest",
             
             "resourceRequirements": null,
             "essential": true,
@@ -23,8 +23,8 @@
     "networkMode": "awsvpc",
     "memory": "512",
     "cpu": "256",
-    "executionRoleArn": "arn:aws:iam::184121542536:role/ecsTaskExecutionRole",
-    "family": "ecs-doggy-sandbox-task-definition",
+    "executionRoleArn": "arn:aws:iam::317047489192:role/ecsTaskExecutionRole",
+    "family": "my-clock-sandbox-task-definition",
     "taskRoleArn": "",
     "placementConstraints": []
 }
