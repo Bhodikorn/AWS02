@@ -5,8 +5,8 @@
     "inferenceAccelerators": [],
     "containerDefinitions": [
         {
-            "name": "my-clock",
-            "image": "317047489192.dkr.ecr.ap-southeast-1.amazonaws.com/doggy:lastest",
+            "name": "Container-dog",
+            "image": "317047489192.dkr.ecr.ap-southeast-1.amazonaws.com/doggy",
             
             "resourceRequirements": null,
             "essential": true,
