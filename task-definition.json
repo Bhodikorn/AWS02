@@ -24,7 +24,7 @@
     "memory": "512",
     "cpu": "256",
     "executionRoleArn": "arn:aws:iam::317047489192:role/ecsTaskExecutionRole",
-    "family": "my-clock-sandbox-task-definition",
+    "family": "my-clock-task-definition",
     "taskRoleArn": "",
     "placementConstraints": []
 }
