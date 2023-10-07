@@ -9,7 +9,7 @@ env:
   ECR_REPOSITORY: doggy
   ECS_SERVICE: Clock-web-service
   ECS_CLUSTER: Clusty
-  ECS_TASK_DEFINITION: my-clock
+  ECS_TASK_DEFINITION: task-definition.json
   CONTAINER_NAME: Container-dog
   AWS_SDK_LOAD_CONFIG: 1
 permissions:
