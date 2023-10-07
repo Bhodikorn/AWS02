@@ -6,11 +6,11 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  ECR_REPOSITORY: doggy_repo
-  ECS_SERVICE: doggy-app
-  ECS_CLUSTER: doggy-app
-  ECS_TASK_DEFINITION: task-definition.json
-  CONTAINER_NAME: ecs-doggy-sandbox
+  ECR_REPOSITORY: doggy
+  ECS_SERVICE: Clsuty
+  ECS_CLUSTER: Clsuty
+  ECS_TASK_DEFINITION: my-clock
+  CONTAINER_NAME: Container-dog
   AWS_SDK_LOAD_CONFIG: 1
 permissions:
   contents: read
