@@ -2,9 +2,9 @@ name: CICD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -72,7 +72,7 @@ jobs:
       - name: Download task definition
         run: |
           aws ecs describe-task-definition --task-definition ${{ secrets.ECS_CONTAINER_DEFINITION }} \
-          --query taskDefinition > task-definition.json
+            --query taskDefinition > task-definition.json
 
   fill-in-task-definition:
     runs-on: ubuntu-latest
